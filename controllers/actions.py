@@ -1,9 +1,11 @@
-from rss_parser import Parser
 import aiohttp
+
 from arsenic import get_session
 from arsenic.browsers import Chrome
 from arsenic.services import Chromedriver
+from rss_parser import Parser
 
+from conf import chromedriver_path
 
 async def get_xml_with_chrome(rss_url):
     browser = Chrome()
@@ -12,7 +14,7 @@ async def get_xml_with_chrome(rss_url):
                                         "--disable-gpu",
                                         "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36"]}
     }
-    async with get_session(Chromedriver(binary=r'd:\work\chromedriver.exe'), browser) as session:
+    async with get_session(Chromedriver(binary=chromedriver_path), browser) as session:
         await session.get(rss_url)
         content = await session.get_page_source()
 
