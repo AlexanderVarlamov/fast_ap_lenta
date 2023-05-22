@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 
 from models.models import NewsTypeRequestModel, NewsReturnModel
 from controllers.req_processors import process_news_request
+from controllers.sources_dict import sources
 
 routes = APIRouter()
 
@@ -17,4 +18,5 @@ async def get_last_news(item: NewsTypeRequestModel) -> NewsReturnModel:
     if news:
         return NewsReturnModel(news=news)
     else:
-        raise HTTPException(status_code=422, detail="Такой опции не предусмотрено")
+        raise HTTPException(status_code=422,
+                            detail=f'Такой опции не предусмотрено. Допустимые источники: {sources.keys()}, либо all')

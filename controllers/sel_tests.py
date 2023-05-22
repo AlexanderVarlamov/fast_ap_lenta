@@ -1,14 +1,17 @@
 import asyncio
 
-from selenium import webdriver
-from actions import *
 from arsenic import get_session
 from arsenic.browsers import Chrome
 from arsenic.services import Chromedriver
 
+from conf import chromedriver_path
+from actions import *
+
+
+
 
 async def get_content():
-    async with get_session(Chromedriver(binary=r'd:\work\chromedriver.exe '), Chrome()) as session:
+    async with get_session(Chromedriver(binary=chromedriver_path), Chrome()) as session:
         await session.get(r'https://news.ru/rss/type/post/')
         content = await session.get_page_source()
 
