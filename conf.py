@@ -12,3 +12,5 @@ config = configparser.ConfigParser()
 config.read('settings.ini')
 
 chromedriver_path = config['EXEC_PATH']['chrome_driver_path']
+port = int(config['NETWORK']['port'])
+
