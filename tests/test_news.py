@@ -18,6 +18,6 @@ import views as v
 class TestNews:
     async def test_unexisting_source(self):
         with pytest.raises(HTTPException):
-            item = m.NewsTypeRequestModel.parse_raw('{"sources": ["fault_source"]}')
+            item = m.NewsTypeRequestModel.parse_raw('{"sources": ["wrong_source"]}')
             await v.get_last_news(item)
 
