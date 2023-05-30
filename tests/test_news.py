@@ -15,6 +15,7 @@ from fastapi import HTTPException
 os.chdir('..')
 import models as m
 import views as v
+import controllers as c
 
 
 @pytest.fixture
@@ -42,7 +43,7 @@ def mock_browser_session(mocker):
 
 @pytest.mark.asyncio
 class TestNews:
-    async def test_unexisting_source(self):
+    async def test_of_non_existing_source(self):
         with pytest.raises(HTTPException):
             item = m.NewsTypeRequestModel.parse_raw('{"sources": ["wrong_source"]}')
             await v.get_last_news(item)
@@ -101,3 +102,28 @@ class TestNews:
             """
             res = await v.get_last_news(item)
             assert res.news == [{'rambler': [f'{news_title}']}], "Получение новостей с rambler не работает"
+
+    async def test_all_sources(self, mock_browser_session):
+        news_title = 'Филипп Киркоров объявил о регистрации брака с Юрием Хованским'
+        item = m.NewsTypeRequestModel.parse_raw('{"sources": ["all"]}')
+        mock = aiohttp.ClientSession
+        mock.get = MagicMock()
+        mock.get.return_value.__aenter__.return_value.text.return_value = f"""
+                             <?xml version="1.0" encoding="UTF-8"?>
+                             <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+                                 <channel>
+                                     <language>ru</language>
+                                     <title>Lenta.ru</title>
+                                     <description>Новости, статьи, фотографии, видео. Семь дней в неделю, 24 часа в сутки.</description>
+                                     <link>https://lenta.ru</link>
+                                     <item>
+                                         <guid>https://lenta.ru/news/2023/05/29/podpisal/</guid>
+                                         <author>Александр Варламов</author>
+                                         <title>{news_title}</title>
+                                     </item>
+                                 </channel>
+                             </rss>
+                   """
+        res = await v.get_last_news(item)
+        res_keys = set([key for k in res.news for key in k.keys()])
+        assert res_keys == c.sources.keys()
