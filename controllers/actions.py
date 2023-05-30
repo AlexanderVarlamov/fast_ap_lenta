@@ -7,7 +7,8 @@ from rss_parser import Parser
 
 from conf import chromedriver_path
 
-async def get_xml_with_chrome(rss_url):
+
+async def get_xml_with_chrome(rss_url: str):
     browser = Chrome()
     browser.capabilities = {
         "goog:chromeOptions": {"args": ["--headless",
@@ -21,14 +22,14 @@ async def get_xml_with_chrome(rss_url):
     return content
 
 
-async def get_xml(rss_url):
+async def get_xml(rss_url: str):
     async with aiohttp.ClientSession() as session:
         async with session.get(url=rss_url, ssl=False) as response:
             xml = await response.text()
     return xml
 
 
-def parse_rss(xml):
+def parse_rss(xml: str):
     parser = Parser(xml=xml)
     feed = parser.parse()
     return [item.title for item in feed.feed]
