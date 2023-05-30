@@ -33,5 +33,5 @@ async def start_page():
     return f'''
     <h2>There is no frontend yet</h2>
     <body>
-    Please, use <a href="http://127.0.0.1:{port}/docs">Swagger</a>
+    Please, use the <a href="http://127.0.0.1:{port}/docs">Swagger</a>
     </body>'''

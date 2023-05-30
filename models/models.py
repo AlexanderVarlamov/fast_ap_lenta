@@ -9,5 +9,3 @@ class NewsReturnModel(BaseModel):
     news: list[dict[str, list[str]]] = Field(...)
 
 
-item = NewsTypeRequestModel.parse_raw('{"sources": ["fake_source"]}')
-print(item)
