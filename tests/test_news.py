@@ -1,7 +1,7 @@
 """
 version 
 @author varlamov.a
-@email varlamov.a@rt.ru
+@email warlamovav@yandex.ru
 @date 29.05.2023
 @time 9:35
 """
