@@ -9,3 +9,7 @@ class NewsReturnModel(BaseModel):
     news: list[dict[str, list[str]]] = Field(...)
 
 
+class RawNewsReturnModel(BaseModel):
+    news: list[dict[str, list[tuple[str, str]]]] = Field(...)
+
+

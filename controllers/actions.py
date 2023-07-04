@@ -35,22 +35,28 @@ def parse_rss(xml: str):
     return [item.title for item in feed.feed]
 
 
-async def lenta_ru_news() -> list[str]:
+def parse_rss_for_web(xml: str):
+    parser = Parser(xml=xml)
+    feed = parser.parse()
+    return [(item.title, item.link) for item in feed.feed]
+
+
+async def lenta_ru_news(raw=False) -> list:
     rss_url = "https://lenta.ru/rss/last24"
     xml = await get_xml(rss_url)
-    titles = parse_rss(xml)
+    titles = parse_rss(xml) if not raw else parse_rss_for_web(xml)
     return titles
 
 
-async def news_ru_news() -> list[str]:
+async def news_ru_news(raw=False) -> list:
     rss_url = "https://news.ru/rss/type/post/"
     xml = await get_xml_with_chrome(rss_url)
-    titles = parse_rss(xml)
+    titles = parse_rss(xml) if not raw else parse_rss_for_web(xml)
     return titles
 
 
-async def rambler_news() -> list[str]:
+async def rambler_news(raw=False) -> list:
     rss_url = "https://news.rambler.ru/rss/world/"
     xml = await get_xml(rss_url)
-    titles = parse_rss(xml)
+    titles = parse_rss(xml) if not raw else parse_rss_for_web(xml)
     return titles

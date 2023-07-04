@@ -1,8 +1,8 @@
 from fastapi import APIRouter, HTTPException
 from starlette.responses import HTMLResponse
 
-from models.models import NewsTypeRequestModel, NewsReturnModel
-from controllers.req_processors import process_news_request
+from models.models import NewsTypeRequestModel, NewsReturnModel, RawNewsReturnModel
+from controllers.req_processors import process_news_request, process_raw_news_request
 from controllers.sources_dict import sources
 from conf import port
 
@@ -35,3 +35,18 @@ async def start_page():
     <body>
     Please, use the <a href="http://127.0.0.1:{port}/docs">Swagger</a>
     </body>'''
+
+
+@routes.post(
+    '/getnews_raw',
+    response_model=RawNewsReturnModel,
+    status_code=200
+)
+async def get_raw_last_news(item: NewsTypeRequestModel) -> RawNewsReturnModel:
+    news = await process_raw_news_request(item.sources)
+    print(news)
+    if news:
+        return RawNewsReturnModel(news=news)
+    else:
+        raise HTTPException(status_code=422,
+                            detail=f'Такой опции не предусмотрено. Допустимые источники: {sources.keys()}, либо all')

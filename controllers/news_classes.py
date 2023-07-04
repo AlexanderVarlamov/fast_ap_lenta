@@ -10,18 +10,27 @@ class NewsGetter(ABC):
 
 
 class LentaNewsGetter(NewsGetter):
+    def __init__(self, raw=False):
+        self.raw = raw
+
     async def get_news(self):
-        return await lenta_ru_news()
+        return await lenta_ru_news(self.raw)
 
 
 class NewsRuGetter(NewsGetter):
+    def __init__(self, raw=False):
+        self.raw = raw
+
     async def get_news(self):
-        return await news_ru_news()
+        return await news_ru_news(self.raw)
 
 
 class RamblerGetter(NewsGetter):
+    def __init__(self, raw=False):
+        self.raw = raw
+
     async def get_news(self):
-        return await rambler_news()
+        return await rambler_news(self.raw)
 
 
 class SourceNewsGetter:
